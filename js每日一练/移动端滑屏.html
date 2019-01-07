@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>移动端滑屏</title>
+	<style type="text/css">
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		html,body{
+			height: 100%;
+		}
+		html{
+			font-size: 4vw;/*16.56px*/
+		}
+		.header{
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height:10.99033816425121rem ;
+			background: url(img/title.png) no-repeat;
+			background-size:100% 100%;
+		}
+		
+		.card{
+			height: 100%;
+			width: 100%;
+			position: relative;
+			perspective: 500px;
+			overflow: hidden;
+		}
+		.box{
+			height: 20rem;
+			width: 20rem;
+			position: absolute;
+			bottom: 4rem;
+			left: 50%;
+			transform: translateX(-50%);
+			transform-style: preserve-3d;
+			
+		}
+		.box div{
+			position: absolute;
+			left: 0;
+			top: 0;
+			transform-origin: -300px -60px;
+		}
+		.box div img{
+			border-radius: 2rem;
+			border: 1px solid #000;
+    		box-shadow: 3px 3px 3px rgba(0,0,0,.2);
+			border: 1px solid #000;
+			vertical-align: middle;
+		}
+		/*.box div:nth-of-type(2){
+			transform: rotate(-10deg) translateZ(-60px);
+		}
+		.box div:nth-of-type(3){
+			transform: rotate(-20deg) translateZ(-120px);
+		}
+		.box div:nth-of-type(4){
+			transform: rotate(-30deg) translateZ(-180px);
+		}
+		.box div:nth-of-type(5){
+			transform: rotate(-40deg) translateZ(-240px);
+		}
+		.box div:nth-of-type(6){
+			transform: rotate(-50deg) translateZ(-300px);
+		}
+		.box div:nth-of-type(7){
+			transform: rotate(-60deg) translateZ(-360px);
+		}*/
+	</style>
+</head>
+<body>
+	
+	<header class="header"></header>
+	<div class="card">
+		
+		<div class="box">
+			<div><img src="img/card1.jpg" alt="" /></div>
+			<div><img src="img/card2.jpg" alt="" /></div>
+			<div><img src="img/card3.jpg" alt="" /></div>
+			<div><img src="img/card4.jpg" alt="" /></div>
+			<div><img src="img/card5.jpg" alt="" /></div>
+			<div><img src="img/card6.jpg" alt="" /></div>
+			<div><img src="img/card7.jpg" alt="" /></div>
+		</div>
+		
+	</div>
+	
+	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+	<script type="text/javascript">
+		var oBox = $(".box");
+		var aDiv = $(".box div");
+		var positionArr = [];
+		var now = 0;
+		var off = true;
+		var startX,disX = 0;
+		init();
+		function init(){
+			aDiv.each((index,elem)=>{
+				$(elem).css({"transform":"rotate(-"+10*index+"deg) translateZ(-"+60*index+"px)"});
+				positionArr.push([10*index,60*index]);
+			})
+		}
+		
+		aDiv.on("touchstart",function(e){
+			startX = e.originalEvent.targetTouches[0].pageX;
+		})
+		
+		aDiv.on("touchmove",function(e){
+			disX = e.originalEvent.targetTouches[0].pageX -startX;
+			if(Math.abs(disX)>100){
+				if(!off){
+					return
+				}
+				off = false;
+				aDiv.eq(now).css({"transition":"0.5s,opacity .1s .1s","transform":"rotateY(-20deg) translateX(-500px)","opacity":"0"});
+				
+				
+				positionArr.unshift(positionArr.pop());
+				
+				aDiv.each((index,elem)=>{
+					if(now==index){
+						return;
+					}
+					$(elem).css({"transition":"0.5s,opacity .1s .3s"});
+					$(elem).css("opacity","1");
+					$(elem).css({"transform":"rotate(-"+positionArr[index][0]+"deg) translateZ(-"+positionArr[index][1]+"px)"});
+				})
+				
+				now++;
+				if(now == aDiv.length){
+	                now = 0;
+	            }
+	
+				setTimeout(()=>{
+					off = true
+				},300)
+			}	
+		})
+	</script>
+</body>
+</html>

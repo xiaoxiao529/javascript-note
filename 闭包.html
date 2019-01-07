@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		
+		<ul>
+			<li>111111111</li>
+			<li>111111111</li>
+			<li>111111111</li>
+		</ul>
+		
+		<script type="text/javascript">
+			
+			
+			//1、函数嵌套函数，并且内部函数可以引用外部函数的参数和变量。参数和变量不会被垃圾回收机制收回。
+			
+			function aaa(a){
+				
+				var b=1;
+				function bbb(){
+					alert(a);
+					alert(b);
+				}
+			}
+			aaa();  ///aaa函数执行完毕之后，参数a和变量b不会被垃圾回收机制收回，因为aaa函数内部的bbb函数还在引用a和b
+			
+			
+			//垃圾回收机制
+			function zzz(){
+			    var a=1;
+			}
+			zzz();  //函数执行完之后，变量a就会被释放，节省内存
+			
+			
+			//2、好处
+			//★希望一个变量长期驻扎在内存中
+			//★避免全局变量的污染
+			//★私有方法，把方法变为函数的私有方法
+			
+			
+			
+			
+			function ccc(){
+				var a = 1;  //a局部变量
+				a++;
+				alert(a);
+			}
+			
+			//ccc();  //2  垃圾回收机制，调用完a就被回收
+			//ccc();  //2  下面调用，a又重新生成，所以两次弹出的都是2
+			
+			
+			/*------------------------------------------------------------*/
+			
+			/*函数声明*/
+			function eee(){
+				alert(1);
+			}
+			//eee();  //1
+			
+			/*函数表达式*/
+			//()()
+			(function(){
+				alert(1);
+			})();  //1  直接调用，不需要写函数名，然后再调用了
+			
+			function ddd(){
+				var a=1;  //a局部变量
+				return function(){  //返回一个匿名函数  ，利用闭包使得：a是局部函数，然后可以累加，不至于函数执行完毕之后被垃圾回收机制回收了，从而可以实现累加。
+					a++;
+					alert(a);
+				}
+			}
+			var n1 = ddd();
+			//n1();  //2
+			//n1();  //3
+			//alert(a);  //error a is not defined.
+			
+			/*------------------------------------------------------------*/
+			
+			/*改些上面的,使用函数表达式*/
+			
+			var fff = (function(){  //模块化代码  减少全局变量的污染
+				var a=1;
+				return function(){
+					a++;
+					alert(a);
+				}
+			})();
+			
+			fff();  //2   fff是外部函数执行的返回值，也就是return出来的那个函数
+			fff();  //3
+			
+			
+			/*私有方法  模块化代码，私有变量和方法，避免全局污染*/
+			var ggg = (function(){
+				
+				var a=10;
+				
+				function aaa(){  //aaa,bbb是ggg的私有方法，变量a是aaa和bbb的全局变量
+					a++;
+					alert(a);
+				}
+				
+				function bbb(){
+					a++;
+					alert(a);
+				}
+				
+				return {
+					a:aaa,
+					b:bbb
+				}
+				
+			})()
+			
+			ggg.a();  //11
+			ggg.b();  //12
+			
+			
+			/*------------------------------------------------------------*/
+			//3、用法
+			//模块化代码
+			//在循环中直接找到对应元素的索引，而不需要额外加索引来标记
+			
+			/*window.onload = function(){
+				var aLi = document.querySelectorAll('li');
+				
+				for (var i=0;i<aLi.length;i++) {  //循环结束了，而下面的代码还没有去执行，只有当我们去点击的时候下面代码才会去执行，但是当我们点击的时候，for循环已经结束了,i已经变成3了
+					aLi[i].onclick = function(){
+						alert(i);  //弹3次，都是3，不是0、1、2
+					}
+				}
+			}*/
+			
+			/*方法一、利用闭包改写,使得弹出0、1、2*/
+			/*window.onload = function(){
+				var aLi = document.querySelectorAll('li');
+				
+				for (var i=0;i<aLi.length;i++) { 
+					(function(i){  //把循环当中的i(0,1,2)当做一个参数，传进去(永远存在内存当中，想用的时候拿来用)，外部函数执行完毕不会影响内部函数，参数或变量也不会被回收
+						aLi[i].onclick = function(){  //内部函数可以调用外部函数传进来的参数或者变量
+							alert(i);  //0、1、2
+						}
+					})(i)
+				}
+			}*/
+			
+			/*方法二、利用闭包改写,使得弹出0、1、2*/
+			window.onload = function(){
+				var aLi = document.querySelectorAll('li');
+				for (var i=0;i<aLi.length;i++) { 
+					
+					aLi[i].onclick = (function(i){
+						return function(){
+							alert(i);  //0,1,2
+						}
+					})(i)
+
+				}
+			}
+			
+			
+			/*------------------------------------------------------------*/
+			/*4、闭包需要注意的地方*/
+			
+			//IE下会引发内存泄漏
+			//下面2种做法可以防止内存泄露
+			window.onload = function(){
+				var oDiv = document.getElementById('div1');
+				oDiv.onclick = function(){
+					alert(oDiv.id);  //这里面引用外部的oDiv
+				}
+				window.onunload = function(){
+					oDiv.onclick = null;
+				}
+			}
+			
+			window.onload = function(){
+				var oDiv = document.getElementById('div1');
+				var id = oDiv.id;
+				oDiv.onclick = function(){
+					alert(id);  //这里面引用外部的oDiv
+				}
+				oDiv = null;
+			}
+			
+		</script>
+		
+	</body>
+</html>

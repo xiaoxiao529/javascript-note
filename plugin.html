@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>插件编写</title>
+    </head>
+    <body>
+
+        <p>
+            <a href="javascript:;">链接一</a>
+            <a href="javascript:;">链接二</a>
+            <a href="javascript:;">链接三</a>
+        </p>
+
+        <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+        <script type="text/javascript">
+
+            /*方法一:通过$.extend()来扩展jQuery
+                   在jQuery命名空间或者理解成jQuery身上添加了一个静态方法
+                   所以我们调用通过$.extend()添加的函数时直接通过$符号调用（$.myfunction()）
+                   而不需要选中DOM元素($('#example').myfunction())。
+                   这种方式用来定义一些辅助方法是比较方便的。比如一个自定义的console，输出特定格式的信息，
+                   定义一次后可以通过jQuery在程序中任何需要的地方调用它。
+            */
+            $.extend({
+                sayHello:function(name){
+                    alert("hello"+ (name ? name : "jim"));
+                }
+            });
+            //$.sayHello("xiao");
+
+            /*方法二:通过$.fn 向jQuery添加新的方法
+                    基本上就是往$.fn上面添加一个方法，名字是我们的插件名称。然后我们的插件代码在这个方法里面展开。
+                    在插件名字定义的这个函数内部，this指代的是我们在调用该插件时，用jQuery选择器选中的元素，
+                    一般是一个jQuery类型的集合。比如$('a')返回的是页面上所有a标签的集合，且这个集合已经是jQuery包装类型了，
+                    也就是说，在对其进行操作的时候可以直接调用jQuery的其他方法而不需要再用美元符号来包装一下。
+            */
+            $.fn.colorRed = function(){
+                this.css("color","red");  ////在这个方法里面,this指的是用jQuery选中的元素，不需要加$
+                this.each(function(){  //this指代jQuery选择器返回的集合,在each方法内部，this指带的是普通的DOM元素了，如果需要调用jQuery的方法那就需要用$来重新包装一下。
+                    $(this).append($(this).attr("href"));
+                })
+            }
+            /*调用的时候，要先获取jquery对象，然后调用插件方法，不是直接colorRed("a")，切记！*/
+            //$("a").colorRed();
+            
+            //给jq插件提供参数
+            $.fn.setFontSize = function(options){
+            	var defaults = {
+            		"color":"red",
+            		"fontSize":"12px"
+            	}
+            	var settings = $.extend({},defaults,options);
+            	this.css({
+            		"color":settings.color,
+            		"fontSize":settings.fontSize
+            	})
+            	//return this;  加上这个就是true了
+            	//可以合并起来写
+            	/*return this.css({
+            		"color":settings.color,
+            		"fontSize":settings.fontSize
+            	})*/
+            	//先不用管什么return this，先把需要的功能写好，然后在前面加上return就行了。
+            }
+            var obj = $("a").setFontSize({
+            	"color":"blue",
+            	"fontSize":"26px"
+            });
+            console.log(obj instanceof jQuery);  //false，因为没有return this，所以想链式调用是不行的
+            
+            //面向对象的插件开发
+            var fullname = 'John Doe';
+            var obj = {
+			　　fullname: 'Colin Ihrig',
+			　　prop: {
+			　　　　fullname: 'Aurelio De Rosa',
+			　　　　getFullname: function() {
+			　　　　　　return this.fullname;
+			　　　　}
+			　　}
+			};
+			console.log(obj.prop.getFullname());//Aurelio De Rosa
+			var test = obj.prop.getFullname;
+			console.log(test());  //John Doe
+			 obj.func = obj.prop.getFullname;
+			 console.log(obj.func());   //Colin Ihrig
+			 var arr = [obj.prop.getFullname,1,2];
+			 arr.fullname = "JiangHao";
+			 console.log(arr[0]());  //JiangHao
+        </script>
+
+    </body>
+</html>

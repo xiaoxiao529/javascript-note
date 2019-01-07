@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		
+		<script type="text/javascript">
+			//1、JavaScript中如何检测一个变量是一个String类型？请写出函数实现
+			let a = 'aaa';
+			console.log(typeof a === 'string');  //true
+			console.log(typeof(a) === 'string'); //true
+			console.log(a instanceof String);   //false
+			
+			var b = 'b',  //类型为string，基本类型
+				strb1 = new String(b),  //引用类型
+				strb2 = String(b);  ////类型为string，基本类型
+			
+			console.log(new String(a) instanceof String );  //true
+			
+			var url = 'http://www.runoob.com/jquery/misc-trim.html?channelid=12333&name=xiaoming&age=23';
+			function getParams(obj){
+				var href = obj;
+				var arg = href.split('?');
+				if( arg[0] === href ){
+					return ''
+				}
+				var paramObj = {};
+				var paramArr = arg[1].split('&');
+				for(var i=0;i<paramArr.length;i++){
+					var arr = paramArr[i].split('=');
+					paramObj[ arr[0] ] = arr[1];
+				}
+				return paramObj;
+			}
+			console.log( getParams(url)['age'] )
+			
+			/*//找出字符串中出现次数最多的字母,将该字母和字母出现的次数拼接成一个新字符串并返回
+			//传入:"WelcomeToQianfengE";，返回"e4"
+			var testStr = 'WelcomeToQianfengE';
+			function getStr(str){
+				var maxNum = 0,  //最多出现次数
+					strObj = {},
+					maxStr = '';  //最多出现次数的字符
+				for (var i=0;i<str.length;i++) {  //将字符和对应出现的字数都存在一个对象strObj中
+					if(!strObj[str.charAt(i).toLowerCase()]){  //charAt(i)，根据索引i返回对应位置的字符  strObj['w'] = 1;
+						strObj[str.charAt(i).toLowerCase()] = 1;  //不存在的时候，赋值为1
+					}else{
+						strObj[str.charAt(i).toLowerCase()]++;  //存在就在1的基础上自增
+					}
+				}
+
+				for(var attr in strObj){
+					if(maxNum<strObj[attr]){
+						maxNum = strObj[attr];
+						maxStr = attr;
+					}
+					
+				}
+				console.log(maxNum+maxStr);  //"4e"
+			}
+			getStr(testStr)
+			/*var obj = {}
+			obj['n']=1; //{n: 1}
+			obj['n']++; //{n: NaN}*/
+			
+			var testStr = 'vfdergeasgraegegbedag';
+			function getStr( str ){
+				var maxStr = '',
+					maxNum = 0,
+					obj = {};
+					
+					for(var i=0;len=str.length,i<len;i++){  //i是数值，从0开始
+						if( !obj[str.charAt(i)] ){
+							obj[str.charAt(i)] = 1;
+						}else{
+							obj[str.charAt(i)]++;
+						}
+					}
+					
+					for(var attr in obj){
+						if(maxNum<obj[attr]){
+							maxNum = obj[attr];
+							maxStr = attr;
+						}
+					}
+					console.log('出现最多次数字母：'+maxStr);
+					console.log('出现次数：'+maxNum);
+			}
+			getStr(testStr);
+			
+			var url2 = 'http://www.runoob.com/jquery/misc-trim.html?channelid=12333&name=xiaoming&age=23';
+			function getParam2(url){
+				var iParam = url.split("?");
+				if(iParam[0]===url){
+					return ""
+				}
+				var iParamAttribute = iParam[1].split("&");
+				var obj = {};
+				for(var i=0;i<iParamAttribute.length;i++){
+					var arr = iParamAttribute[i].split("="),
+						iParamKey = arr[0],
+						iParamValue = arr[1];
+					obj[iParamKey] = iParamValue
+				}
+				return obj;
+			}
+			console.log(getParam2(url2)['age']);
+			
+			//将字符串按照单词进行逆序，空格作为划分单词的唯一条件，传入:”Welome to Beijing”改为 “Beijing to Welcome”
+			var str3 = "Welome to Beijing";
+			function getStr3(str){
+				var strArr = str.split(" ").reverse().join(" ");
+				console.log(strArr);
+			}
+			getStr3(str3)
+			
+			//传入一个数组，元素类型与个数皆未知，返回新数组，由原数组的元素正序反序拼接而成
+			//传入[“One”, “Two”,”Three”] 返回[“One”, “Two”, “Three”,”Three”,”Two”, “One”]
+			var arr4 = ["One","Two","Three"];
+			function getAr4(arr){
+				var nenewArr4 = arr.reverse();
+				console.log(arr.concat(nenewArr4))
+			}
+			getAr4(arr4);
+			
+			//[1,2,3,4,5,6]不定长，输出"1-2;3-4;5-6"
+			;(function(){
+				let arr1 = [1,2,3,4,5,6];
+				let str1 = '';
+				function getArr1(arr){
+					for( let i=0;i<arr.length;i++){
+						if(i%2==0){
+							str1+=arr[i]+"-"
+						}else{
+							str1+=arr[i]+";"
+						}
+					}
+					console.log(str1)
+				}
+				getArr1(arr1)
+			})()
+			
+			//传入:”abcabcabc”, “abc”;   返回:3
+			let str4 = "abcabcabc";
+			function getStr4(str){
+				let s = "abc", //3
+					idx = str.indexOf(s); //0
+					i=0;
+				while(str.indexOf(s)!=-1){
+					i++;
+					str=str.substring(idx+s.length);
+					console.log(idx+s.length)  //3 3 3
+				}
+				console.log(i)
+				
+			}
+			getStr4(str4)
+			
+			
+			
+			
+		</script>
+		
+	</body>
+</html>

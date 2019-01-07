@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>js每日一练之星星评分</title>
+        <link rel="stylesheet" type="text/css" href="css/reset.css"/>
+        <style type="text/css">
+            .star-list{
+                width: 200px;
+                margin: 50px auto;
+            }
+            .star-item{
+                float: left;
+                width: 19px;
+                height: 19px;
+                background:url(img/star.png) no-repeat 0 0;
+                margin: 0 2px;
+                cursor: pointer;
+            }
+            .star-item.on{
+                background: url(img/star.png) no-repeat 0 -28px;
+            }
+        </style>
+    </head>
+    <body>
+
+        <ul class="star-list clear">
+            <li class="star-item" title="很差"></li>
+            <li class="star-item" title="较差"></li>
+            <li class="star-item" title="一般"></li>
+            <li class="star-item" title="较好"></li>
+            <li class="star-item" title="很好"></li>
+        </ul>
+
+		<ul class="star-list1 clear">
+            <li class="star-item" title="很差"></li>
+            <li class="star-item" title="较差"></li>
+            <li class="star-item" title="一般"></li>
+            <li class="star-item" title="较好"></li>
+            <li class="star-item" title="很好"></li>
+        </ul>
+        <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+        <script type="text/javascript">
+        	
+//          var starRating = (function($){
+//          	
+//          	var starLight = function(items,num){
+//          		items.each(function(i,elem){
+//	                    if(i<=num){
+//	                        $(elem).addClass("on");
+//	                    }else{
+//	                        $(elem).removeClass("on");
+//	                    }
+//	                })
+//          	}
+//          	
+//          	function init(el,num){
+//          		var starList = $(el),
+//	                items = starList.find(".star-item");
+//          		starLight(items,num);
+//		            starList.on("mouseover",".star-item",function(){
+//		            	starLight(items,$(this).index());
+//		            }).on("click",".star-item",function(){
+//		            	num = $(this).index();  //只在这儿赋值了，否则都是起始值
+//		            }).on("mouseout",function(){
+//		            	starLight(items,num);
+//		            })
+//          	}
+//          	
+//          	$.fn.extend({
+//          		rating:function(num){
+//          			return this.each(function(){
+//          				init(this,num);
+//          			})
+//          		}
+//          	})
+//          	
+//          	return {
+//          		init:init
+//          	}
+//          	
+//          	
+//          	
+//          })(jQuery)
+//          
+//          //starRating.init(".star-list",2);
+//          $(".star-list").rating(1);
+
+			(function($){
+				
+				$.fn.starRating = function(options){
+					var defaults = {
+						num:2
+					}
+					var settings = $.extend({},defaults,options);
+					
+					var starLight = function(items,num){
+						items.each(function(i,elem){
+							if(i<=num){
+								$(this).addClass("on");
+							}else{
+								$(this).removeClass("on");
+							}
+						})
+					}
+					
+					var init = function(el,num){
+						var starList = $(el),
+							items = starList.find(".star-item");
+						starLight(items,num-1);
+						
+						starList.on("mouseover",".star-item",function(){
+							starLight(items,$(this).index());
+						}).on("click",".star-item",function(){
+							num = $(this).index()
+						}).on("mouseout",function(){
+							starLight(items,num);
+						})
+						
+					}
+					
+					return this.each(function(num){
+						num = settings.num;
+						init(this,num);
+					})
+					
+				}
+				
+			})(jQuery)
+			$(".star-list").starRating({
+				num:4
+			});
+			$(".star-list1").starRating({
+				num:2
+			});
+        </script>
+    </body>
+</html>

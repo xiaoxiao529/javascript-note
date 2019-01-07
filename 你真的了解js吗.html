@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		
+		<h2>1、定时器——可以传递多个参数</h2>
+		<script type="text/javascript">
+			/*setTimeout(function(){
+				alert(1);  //1
+			},1000)*/
+			/*setTimeout(function(num){
+				alert(num);  //123
+			},1000,123)*/
+		</script>
+		
+		<h2>2、拼接字符串</h2>
+		<script type="text/javascript">
+			/*document.body.innerHTML = 
+			
+			"<div>div</div>"+
+			"<p>p</p>"+
+			"<span>span</span>"+
+			"555"*/		
+			
+			//用反斜杠也可以拼接字符串
+			/*document.body.innerHTML = 
+			
+			"<div>div</div>\
+			<p>p</p>\
+			<span>span</span>\
+			555";*/
+		</script>
+		
+		<h2>3、console.log()</h2>
+		<!--<script type="text/javascript">
+			//不仅可以在控制台输出变量，也可以输出样式和图片
+			var a = "hello";
+			console.log(a);
+			console.log('%c'+a,'font-size:400%;background:blue;color:#fff;');
+		</script>-->
+		
+		
+		<h2>4、typeof</h2>
+		<!--<script type="text/javascript">
+			var arr = [1,2,3];
+			arr.num=10;
+			
+			//两种写法，通过空格连接，或者通过函数形式的()来调用
+			//alert(typeof arr);
+			//alert(typeof(arr));
+			
+			//alert(arr instanceof Object);
+			//alert(arr instanceof(Object));
+			
+			//alert('num' in arr);
+			alert('num' in(arr));
+		</script>-->
+		
+		<h2>5、call——改变this指向</h2>
+		<!--<script type="text/javascript">
+			var obj = {
+				aaa:function(){
+					alert(this);
+				}
+			}
+			var arr = [1,2,3];
+			obj.aaa();  //object
+			obj.aaa.call();  //call不写参数，this指向 Window，apply亦是如此
+			obj.aaa.call(arr);  //[1,2,3]，也就是arr
+		</script>-->
+		
+		<h2>6、insertBefore</h2>
+		
+		<!--insertBefore()方法将把一个给定的节点插入到一个给定元素节点的给定子节点前面，他返回一个指向新增子节点的引用指针：
+
+		reference = element.insertBefore(newNode,targetNode);
+		如上所示，节点newNode将被插入元素节点element并出现在节点targetNode的前面。
+		节点targetNode必须是element元素的一个子节点。
+		如果targetNode节点未给出，newNode节点就将被追加为element元素最后一个子节点-----从效果看，这相当于调用appendChild()的方法。-->
+		
+		<h2>7、匿名函数自执行</h2>
+		
+		
+		
+		<script type="text/javascript">
+			function fn6(){
+				setTimeout(function(){
+					console.log(this);  //this指向Window
+				},1000)
+				setTimeout(()=>{  //箭头函数，内部this指向其定义的时候所在环境的对象，也就是fn6执行时候环境所在的对象，所以this指向obj这个对象
+					console.log(this);  //{a: 1, b: 2}  不能使用call、apply改变箭头函数内部的this指向
+				},1000)
+			}
+			var obj = {a:1};
+			fn6.call(obj);
+		</script>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</body>
+</html>

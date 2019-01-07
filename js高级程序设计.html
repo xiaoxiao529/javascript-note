@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+	<title>javascript高级程序学习</title>
+	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</head>
+	<body>
+		
+		笔记
+		1、数据类型
+		
+			Number类型
+			*数值转换——将非数值转换为数值
+				Number()——用于任何数据类型的转换
+				parseInt()——把字符串转换为数值
+				parseFloat()——把字符串转换为数值
+				
+				parseInt(number,10);  第一个参数是要转换的字符串，第二个参数是转换的进制数
+				parseFloat(number);  只能解析十进制数，所以没有第二个参数
+			
+			String类型
+			*字符串一旦创建，它的值就不能改变。要改变某个变量保存的字符串，首先要销毁原来的字符串，然后再用另一个包含新值的字符串填充该变量。
+			*转换为字符串
+				把一个值转换为一个字符串有两种方法。
+				(1)几乎每个值(数值、布尔值、对象、字符串值)都有一个toString()方法
+					但是，undefined和null没有这个方法
+					
+					在不知道要转换的值是不是null和undefined的情况下，还可以使用转型函数String(),这个函数可以转换任何类型的值为字符串
+					转换规则：该值如果有tostring()方法，则调用该方法(没有参数)并且返回相应的结果
+							如果值是null，返回"null"
+							如果值是undefined，返回"undefined"
+							
+			Object类型	
+			对象，数据与功能的集合	
+				var o = new Object();  对象可以通过执行new操作符后跟要创建的对象类型的名称来创建。而创建Object类型的实例并为其添加属性或者方法，就可以创建自定义的对象。
+				Object类型是所有它的实例的基础，换句话说
+				Object类型所具有的任何属性和方法，也同样存在于更具体的对象中。
+				
+			操作符
+				一元操作符
+				* ++、--
+				var age = 29;
+				++age;  <==> age = age+1;  //30
+				
+				var age = 29;
+				--age;  <==> age = age-1;  //28
+				
+				a++ ——> 先执行程序，然后再自增
+				++a ——> 先自增，然后再执行程序
+				
+				一元操作符，不仅适用于整数，还适用于字符串、布尔值、浮点数和对象
+				
+				* 一元+、-操作符
+				一元+操作符：在对非数值运用+操作符时，该操作符会像Number()转型函数一样，对这个值进行转换。
+				
+				一元-操作符：主要用于表示负数
+				var num = 20;
+				num = -num;  // 变成了-20
+				
+				* 位操作符
+				
+				
+				
+				
+				* 布尔操作符
+				
+				逻辑非!  可以应用于任意的数据类型  始终返回一个布尔值
+				对象 ——> false
+				空字符串 ——> true    非空字符串 ——> false    
+				0 ——> true    非0(包括Infinity) ——> false
+				null ——> true    NaN ——> true    undefined ——> true
+				
+				逻辑与&&  可以应用于任意的数据类型  
+				在有一个操作符不是布尔值的情况下，逻辑与操作就不一定会返回布尔值
+				第一个操作数是对象 ——> 返回第二个操作数
+				第二个操作数是对象 ——> 只有在第一个操作数的求值结果为true的情况下才会返回该对象
+				两个操作数都是对象 ——> 返回第二个操作数
+				有一个操作数是null ——> 返回null
+				有一个操作数是NaN ——> 返回NaN
+				有一个操作数是undefined ——> 返回undefined
+				
+				逻辑与属于短路操作，即如果第一个操作数能够决定结果，那么就不会对第二个操作数进行求值
+				如果第一个操作数为false，那么无论第二个操作数是什么值，结果都不可能是true了。
+				
+				
+				逻辑或||  可以应用于任意的数据类型
+				在有一个操作符不是布尔值的情况下，逻辑与操作就不一定会返回布尔值
+				第一个操作数是对象 ——> 返回第一个操作数
+				有一个操作数的求值结果是false ——> 返回第二个操作数
+				两个操作数都是对象 ——> 返回第一个操作数
+				两个操作数是null ——> 返回null
+				两个操作数是NaN ——> 返回NaN
+				两个操作数是undefined ——> 返回undefined
+				
+				逻辑或也属于短路操作，如果第一个操作数的求值结果为true，就不会对第二个操作数求值了。
+				ps. 我们可以通过逻辑或的这一行为，来避免为变量赋null或undefined值
+				var myData = preferredData || backupData;
+				在这个例子中，变量myData将被赋予等号后面两个值中的一个，有且仅有一个
+				preferredData不等于null，它的值就赋予myData；preferredData等于null，backupData的值就赋予myData。
+				
+				* 逗号操作符
+				多用于声明多个变量，
+				var num1=1,num2=2,num3=3;
+				
+				也可以用于赋值，逗号操作符总会返回表达式的最后一项
+				var num = (1,2,3,4,0);  //num的值是0
+				
+				
+			函数	
+				
+				
+				
+				
+				
+				
+				
+				
+				
+		
+		代码运行
+		<script type="text/javascript">
+			function aaa(){
+				console.log(1)
+			}
+			console.log(typeof aaa);
+			
+			console.log(isNaN(NaN));
+			console.log(isNaN('aaa'));
+			console.log(isNaN('111'));
+			
+			console.log(typeof NaN);
+			
+		</script>
+	</body>
+</html>
