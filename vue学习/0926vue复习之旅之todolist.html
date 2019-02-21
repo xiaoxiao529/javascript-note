@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="《vue.js实战开发系列》20170112课件/index.css">
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div class="page-top">
+        <div class="page-content">
+            <h2>任务计划列表</h2>
+        </div>
+    </div>
+    <div class="main">
+        <h3 class="big-title">添加任务：</h3>
+        <input 
+            placeholder="例如：吃饭睡觉打豆豆；    提示：+回车即可添加任务" 
+            class="task-input" 
+            type="text"
+            v-on:keyup.enter="addTask"
+            v-model="inputText"
+        />
+        <ul class="task-count" v-show="list.length">
+            <li>{{noCheckedItem}}个任务未完成</li>
+            <li class="action">
+                <a href="#all" :class="{active:visibility==='all'}">所有任务</a>
+                <a href="#unfinished" :class="{active:visibility==='unfinished'}">未完成的任务</a>
+                <a href="#finished" :class="{active:visibility==='finished'}">完成的任务</a>
+            </li>
+        </ul>
+        <h3 class="big-title">任务列表：</h3>
+        <div class="tasks">
+
+            <span class="no-task-tip" v-show="!list.length">还没有添加任何任务</span>
+            <ul class="todo-list">
+                <li class="todo" :class="{completed:item.isChecked,editing:item===whichItemEdit}" v-for="item in filterList">  <!--循环的是实例化vm里的data里的list-->
+                    <div class="view">
+                        <input class="toggle"  type="checkbox" v-model="item.isChecked" @click="show(item)" />
+                        <label @dblclick="editItem(item)">{{item.title}}</label>
+                        <button class="destroy" @click="deleteList(item)"></button>
+                    </div>
+                    <input 
+                    	class="edit" 
+                    	type="text" 
+                    	v-model="item.title" 
+                    	v-focus="item===whichItemEdit"
+                    	@keyup.enter="editSuccess(item)"
+                    	@blur="editSuccess(item)" 
+                    	@keyup.esc="cancel(item)"
+                    />
+                    <!--v-focus="item===whichItemEdit"-->
+                </li>
+            </ul>
+        </div>
+    </div>
+ 	<!--@blur="editSuccess(item)"  失去焦点执行此方法-->
+
+	<script type="text/javascript">
+		
+		/*以数据驱动视图的更新变化,而不是直接修改DOM或者class类名*/
+		
+		/*var taskdata = [  //初始数据，默认为空数组
+			{
+				title:"数据一",
+				isChecked:false
+			},
+			{
+				title:"数据二",
+				isChecked:false
+			}
+		]*/
+		
+		 /*Uncaught SyntaxError- Unexpected token o in JSON at position 1  原因是本地之前已经有了xiao-data这个本地存储，收到清除就行了
+		  localStorage.clear();
+		  * 
+		  * */
+		
+		var store = {  //封装本地存储的方法
+			save(key,value){
+				localStorage.setItem(key,JSON.stringify(value));
+			},
+			fetch(key){
+				return JSON.parse(localStorage.getItem(key)) || [];
+			}
+		}
+		
+		var taskdata = store.fetch("xiao-data");
+		
+		var vm = new Vue({
+			el:".main",
+			data:{
+				list:taskdata,  //list的属性值是taskdata这个变量,就等于上面变量定义时的值
+				inputText:"",
+				whichItemEdit:"",  //记录当前哪个item正在编辑
+				prevTitle:"",  //记录之前的title
+				visibility:"all"
+			},
+			watch:{
+				/*list对应的值是一个数组，watch监控的是list数组里面的对象的变化，可是如果是list数组里面的对象里面的属性改变，那么watch是监控不到的，是浅监控
+				 所以需要深监控
+				 * */
+				/*list:function(){  //监控list这个属性，当这个属性对应的值发生变化就会执行函数
+					store.save("xiao-data",this.list);
+				}*/
+				list:{  //深监控
+					handler:function(){
+						store.save("xiao-data",this.list)
+					},
+					deep:true
+				}
+			},
+			methods:{  //事件处理函数中的this指向的是，当前这个根实例vm，和上面的taskdata没有任何关系
+				addTask:function(){
+					this.list.push(  //往数组push一条json数据
+						{
+							title:this.inputText,
+							isChecked:false
+						}
+					)
+					this.inputText = "";
+				},
+				show:function(obj){  //测试isChecked双向绑定   调用show(item)传入的item表示的是当前哪一条数据
+					console.log(obj.isChecked);
+				},
+				deleteList:function(obj){  //函数命名不能为delete
+					var index = this.list.indexOf(obj);
+					this.list.splice(index,1);
+				},
+				editItem:function(obj){  //编辑item
+					
+					this.prevTitle = obj.title;
+					
+					this.whichItemEdit = obj;
+				},
+				editSuccess:function(obj){  //编辑item成功
+					this.whichItemEdit="";
+				},
+				cancel:function(obj){  //取消编辑item
+					obj.title = this.prevTitle;
+					this.whichItemEdit="";
+					this.prevTitle="";
+				}
+			},
+			computed:{
+				noCheckedItem:function(){
+					return this.list.filter(function(obj){
+						return !obj.isChecked
+					}).length;
+				},
+				filterList:function(){
+					
+					var hashList = {
+						//啊啊啊，finished单词拼写错误！！
+						all:function(taskdata){
+							return taskdata;
+						},
+						unfinished:function(taskdata){  //未被选中
+							return taskdata.filter(function(item){
+								return !item.isChecked;
+							})
+						},
+						finished:function(taskdata){
+							return taskdata.filter(function(item){
+								return item.isChecked;
+							})
+						},
+					}
+					console.log(hashList[this.visibility]);
+					return hashList[this.visibility]? hashList[this.visibility](taskdata) : taskdata;  //返回的函数还要传递参数啊啊啊啊啊
+					
+				}
+			},
+			directives:{  //v-focus后面的值是true的时候就执行下面的方法
+				"focus":{
+					update:function(el,binding){
+						if(binding.value==true){
+							el.focus();
+						}
+					}
+				}
+			}
+		})
+		
+		var hashChanged = function(){
+			var hash = window.location.hash.slice(1);
+			vm.visibility = hash;
+		}
+		hashChanged();
+		window.addEventListener('hashchange',hashChanged);
+	</script>
+
+</body>
+</html>

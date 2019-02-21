@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.css"/>
+	<title>Document</title>
+</head>
+
+<body>
+
+	<div id="app" class="container">
+		<div>查询：<input type="text" v-model="gridFilter" /></div>
+		<!--@keyup.enter 等价于v-on:keyup.enter  绑定keyup事件，具体到enter键的keyup上-->
+		<child-template :data="filterData" :column="gridColumn" :filter-key="gridFilter"></child-template>  <!--1.现在子组件已经有父组件的数据了-->
+	</div>
+	
+	<!--2.渲染数据-->
+	<template id="my-template">
+		<table class="table">
+			<thead>
+				<tr>
+					<th v-for="col in column">  <!--column是不变的，变化的只有下面的gridData-->
+						{{col}}
+					</th>
+				</tr>
+			</thead>
+			<tbody>			
+				<tr v-for="entry in data">
+					<td v-for="col in column ">
+						{{entry[col]}}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</template>
+	
+<script src="vue.js"></script>
+<script>
+
+
+	//注册全局组件
+	Vue.config.debug = true;
+	Vue.component("child-template",{
+		template:"#my-template",
+		props:{  // 父子组件通信  要想把父组件数据传递给子组件，需要显示的声明props属性     父组件传递过来的data和columns必须是Array类型，filterKey必须是字符串类型。
+			data:Array,
+			column:Array,
+			filterKey:String
+		}
+		
+	});
+	
+	var vm = new Vue({
+		el:"#app",
+		data:{
+			gridFilter:"",
+			gridColumn:["name","sex","age"],
+			gridData:[
+				{
+					name: 'Jack',
+                    age: 30,
+                    sex: 'Male'
+				},
+				{
+					name: 'Bill',
+                    age: 26,
+                    sex: 'Male'
+				},
+				{
+					name: 'Tracy',
+                    age: 22,
+                    sex: 'Female'
+				},
+				{
+					name: 'Chris',
+                    age: 36,
+                    sex: 'Male'
+				}
+			]
+		},
+		computed:{
+			filterData:function(gridData){  //筛选后的数据
+				return this.gridData.filter(function(filterKey){
+					return ['1','1'];
+				});
+			}
+		}
+	});
+
+
+	
+</script>
+</body>
+</html>

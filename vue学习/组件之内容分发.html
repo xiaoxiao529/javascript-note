@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.css"/>
+	<title>Document</title>
+</head>
+
+<body>
+
+	<div class="container" id="app">
+		<my-component>
+        	<h2>Hello Vue.js!</h2>
+	    </my-component>
+	
+		<p>----------分割线----------</p>
+	
+	    <my-component>
+	    </my-component>
+	    
+	    <p>----------分割线----------</p>
+	    
+	    <my-component>
+	    	<p>3333</p>   <!--这里面有内容，就显示这里面的内容，没有就显示slot里面的内容，而且slot的位置就在template里面的位置-->
+	    </my-component>
+	</div>
+	
+	
+	
+	<template id="myComponent">
+		<div class="content">
+	        <h2>This is a component!</h2>
+	        <slot>如果没有分发内容，则显示slot中的内容</slot>
+	        <p>Say something...</p>
+	    </div>
+	</template>
+	
+<script src="vue.js"></script>
+<script>
+
+	Vue.component("my-component",{
+		template:"#myComponent"
+	});
+	
+	
+	new Vue({
+		el:"#app"
+	})
+	
+	
+	
+	
+	
+	
+</script>
+</body>
+</html>

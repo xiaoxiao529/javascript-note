@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.css"/>
+	<title>Document</title>
+</head>
+
+<body>
+
+	<div class="container" id="app">
+		<div class="">
+			message：{{message}}
+			<child-component v-on:notify="child-msg"></child-component>
+					
+		</div>
+	</div>
+	
+	
+	<template id="childComponent">
+		<div class="">
+			<input type="text" v-model="msg" />
+			<button class="btn" v-on:click="notify">Dispatch事件</button>
+		</div>
+	</template>
+	
+<script src="vue.js"></script>
+<script>
+	//父组件是使用 props 传递数据给子组件，但如果子组件要把数据传递回去，应该怎样做？那就是自定义事件！
+	//有时候我们希望触发父组件的某个事件时，可以通知到子组件；触发子组件的某个事件时，可以通知到父组件。
+	//Vue 实例实现了一个自定义事件接口，用于在组件树中通信。这个事件系统独立于原生 DOM 事件，用法也不同。
+	//每个 Vue 实例都是一个事件触发器：
+	//使用 $on() 监听事件；
+	//使用 $emit() 在它上面触发事件；
+	//使用 $dispatch() 派发事件，事件沿着父链冒泡；
+	//使用 $broadcast() 广播事件，事件向下传导给所有的后代。
+
+	//注册子组件
+	Vue.component("child-component",{
+		template:"#childComponent",
+		data:function(){  //组件注册里面data必须以函数形式存在
+			return {
+				msg:"hello"
+			}
+		},
+		methods:{
+			notify:function(){  //子组件的button元素绑定了click事件，点击调用notify方法
+				if(this.msg.trim()){
+
+					this.$emit("notify");  //这里调用了$dispatch，将事件派发到父组件的child-msg事件，并给该事件提供了一个msg参数					
+				}
+			}
+		}
+	});
+	
+	//初始化父组件
+	var parent = new Vue({
+		el:"#app",
+		data:{
+			message:[]
+		},
+		events:{
+			"child-msg":function(){  //父组件的events选项中定义了child-msg事件，父组件接收到子组件的派发后，调用child-msg事件。
+				this.message.push(1);
+			}
+		}
+		
+	});
+	
+	
+	
+	
+	
+	
+</script>
+</body>
+</html>

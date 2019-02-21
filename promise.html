@@ -3,8 +3,19 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
+		<style type="text/css">
+			#box{
+				width: 100px;
+				height: 100px;
+				background: red;
+				position: absolute;
+				left: 0;
+				top: 0;
+			}
+		</style>
 	</head>
 	<body>
+		<div id="box"></div>
 		<script type="text/javascript">
 			/*function fn1(){
 				console.log(1)
@@ -55,10 +66,94 @@
 			/*let {b,...r} = obj;
 			console.log(b,r)*/
 			
-			let arr = [1,2,3];
-			let [a,...rest] = arr
+			/*let arr = [1,2,3];
+			let [a,...rest] = arr;
+			let b = [...arr];
+			console.log(b);
 			console.log(rest)
 		
+			let set = new Set([1,2,3]);
+			
+			
+			set.add('hi');
+			set.delete(2);
+			
+			set.clear();
+			
+			console.log(set)*/
+			
+			let p = new Promise((resolve,reject)=>{
+				resolve('成功');
+			})
+			p.then((data)=>{
+				console.log(data);  //成功
+			})
+			console.log(p);  //Promise {<resolved>: "成功"}
+			
+			new Promise((resolve,reject)=>{
+				resolve('成功啊啊啊');
+			})
+			.then((data)=>{
+				console.log(data);  //成功啊啊啊
+			})
+
+			
+			/*var box = document.getElementById("box");
+			function move(obj,attr,target,duration,callback){
+				var b = parseInt(getComputedStyle(obj)[attr]);  //初始位置
+				var c = target - b; //运动的总距离
+				var d = duration;  //总持续时间
+				var temp = new Date().getTime();  //当前时间
+				var timer = setInterval(function(){
+					var t = new Date().getTime()-temp;   //实际持续时间，在不断增加，最终和总持续时间进行比较
+					if( t >= d ){
+						clearInterval(timer);
+						t = d;
+					}
+					var v = c/d*t + b;
+					obj.style[attr] = v + 'px';
+					if(t==d){
+						typeof callback === 'function' && callback();
+					}
+				},20)
+			}
+			move(box,"width",200,500,function(){
+				move(box,"height",300,500,function(){
+					move(box,"left",200,500,function(){
+						move(box,"top",200,500,function(){
+							console.log('done');
+						})
+					})
+				})
+			});*/
+			
+			let box = document.getElementById("box");
+			function movePromise(obj,attr,target,duration){
+				
+				return new Promise((res,rej)=>{
+					
+					let b = parseInt(getComputedStyle(obj)[attr]); //obj没有引号，attr是字符串类型
+					let c = target - b ;
+					let d = duration;
+					let temp = new Date().getTime();
+					let timer = setInterval(function(){
+						let t = new Date().getTime() - temp;
+						if(t >= d){
+							clearInterval(timer);
+							t = d;
+						}
+						let v = c/d*t + b;
+						obj.style[attr] = v + 'px';
+						if(t === d){
+							res();
+						}
+					},20)
+				})
+			}
+			/*movePromise(box,"width",200,500)
+			.then( (res,rej)=>{
+				movePromise(box,"height",300,500)
+			} )*/
 		</script>
 	</body>
 </html>

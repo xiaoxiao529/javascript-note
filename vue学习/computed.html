@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.css"/>
+	<title>Document</title>
+	<style type="text/css">
+		.red{
+			color: red;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div id="app">  
+	    <table class="table">  
+	        <tr>  
+	            <td>a</td>  
+	            <td>b=a+1</td>  
+	        </tr>  
+	        <tr>  
+	            <td>{{a}}</td>  
+	            <td>{{b}}</td>  
+	        </tr>  
+	    </table>  
+	    <button @click="add">a = a + 1</button>  
+	    <p>  {{message}}  </p>
+		<input v-model.number="age" type="number">
+	</div>  
+
+<script src="vue.js"></script>
+<script>
+	var vm = new Vue({  
+        el: "#app",  
+        data: {  
+            a: 1,
+            message:"hello",
+            age:"20"
+        },  
+        methods: {  
+            add: function () {  
+                this.a++;                
+            }  
+        },  
+        computed: {  
+            b: function () {  
+                return this.a + 1;  
+            }  
+        }  
+    })  
+    console.log(vm.$data == vm.data);
+</script>
+</body>
+</html>

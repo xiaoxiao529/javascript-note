@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.css"/>
+	<title>Document</title>
+</head>
+
+<body>
+
+	<div class="container" id="app">		
+		<p>Original message: "{{ fullName }}"</p>
+		
+		<select v-model="selected">
+		    <option disabled >请选择</option>
+		    <option value="111">A</option>
+		    <option value="切切切切切切">B</option>
+		    <option>C</option>
+		</select>
+		<span>Selected: {{ selected }}</span>
+		
+	</div>  
+
+<script src="vue.js"></script>
+<script>
+	var vm = new Vue({
+		el:"#app",
+		data:{
+			firstName:"kate-first",
+			lastName:"kate-last",
+			selected: ''
+		},
+		computed: {
+		  fullName:function(){
+		  	return this.firstName + ' ' + this.lastName;
+		  }
+		}
+
+	});
+</script>
+</body>
+</html>

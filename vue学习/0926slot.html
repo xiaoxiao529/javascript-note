@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue之slot</title>
+    <link rel="stylesheet" href="《vue.js实战开发系列》20170112课件/index.css">
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.css"/>
+    <script src="./vue.js"></script>
+</head>
+<body>
+	
+	<div id="app" class="container">
+		<h2>自定义组件</h2>
+		<custom>
+			<p>我是html结构</p>  <!--写在自定义组件结构里面的内容，永远是替换template的slot里面的内容-->
+			
+			<p slot="A">这是替换A</p>
+			<p>这是替换B</p>
+			<p>这是替换C</p>
+			
+			<template slot="all">
+				<p>----------------------</p>
+				<p>批</p>
+				<p>量</p>
+				<p>替</p>
+				<p>换</p>
+				<p>----------------------</p>
+			</template>
+			
+		</custom>
+	</div>
+	
+	<script type="text/javascript">
+		Vue.component("custom",{
+			template:`  //毕竟template里面的内容是通用的，不可能适应所有情况，在调用组件的时候自己再使用slot改写，灵活性更大。
+				<div>
+					
+					<slot></slot>
+					<p>----------------------</p>
+					<p>第一个slot</p>
+					<p>第二个slot</p>
+					<p>第三个slot</p>
+					
+					<slot name="A"><p>这是A</p></slot>
+					<p name="B">这是B</p>
+					<p name="C">这是C</p>
+					
+					<slot name="all">批量替换</slot>
+					
+				</div>
+			`
+		})
+		
+		new Vue({
+			el:"#app"
+		})
+	</script>
+	
+</body>
+</html>

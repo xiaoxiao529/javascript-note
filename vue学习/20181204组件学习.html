@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>20181204组件</title>
+		<script src="vue.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		
+		<template id="myComponent">
+			<div>
+				<p>全局组件</p>
+				<p>{{myData}}</p>
+				<child></child>
+			</div>
+		</template>
+		
+		<template id="childComponent">
+			<div>我是子组件111</div>
+		</template>
+		
+		<div id="app">
+			<firstcomponent></firstcomponent>
+			<p v-changecolor="icolor">111</p>
+		</div>
+		
+		
+		
+		<script type="text/javascript">
+			
+			Vue.directive("changecolor",function(el,binding){
+				el.style.color = binding.value
+			})
+			
+			//注册全局组件
+			Vue.component("firstcomponent",{
+				template:"#myComponent",
+				data(){
+					return {
+						myData:"a data"
+					}
+				},
+				components:{
+					"child":{
+						template:"#childComponent"
+					}
+				}
+				
+			})
+			var vm = new Vue({
+				el:"#app",
+				data:{
+					icolor:"red"
+				}
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.css"/>
+	<title>Document</title>
+</head>
+
+<body>
+
+	<div class="container" id="app">		
+		<my-component></my-component>
+	</div>  
+
+<script src="vue.js"></script>
+<script>
+
+//	//全局注册组件
+//	//1.创建一个组件构造器
+//	var myComponent = Vue.extend({
+//		template:"<div>this is my first component</div>"
+//	});
+//	
+//	//2.注册组件，并且指定组件的标签
+//	Vue.component("my-component",myComponent);
+//	
+//	//3.在Vue实例的作用范围内使用组件
+//	new Vue({
+//		el:"#app"
+//	});
+	
+	
+	//注册全局组件，组件可以在任意模板里面使用
+	//利用组件语法糖简化组件注册过程
+	//全局注册，my-component是标签名称
+	Vue.component('my-component',{
+	    template: '<div>This is the first component!</div>'
+	})
+	
+	var vm1 = new Vue({
+	    el: '#app1'
+	})
+	
+
+	//局部注册组件  —— 用选项对象的components属性实现局部注册
+	//1.创建一个组件构造器
+	var myComponent = Vue.extend({
+		template:"<div>this is my first component</div>"
+	});
+	
+	new Vue({
+		el:"#app",
+		components:{
+			// 2. 将myComponent组件注册到Vue实例下
+			"my-component":myComponent
+		}
+	});
+	
+	//由于my-component组件是注册在#app元素对应的Vue实例下的，所以它不能在其它Vue实例下使用。
+
+	//<div id="app2">
+	    //<!-- 不能使用my-component组件，因为my-component是一个局部组件，它属于#app-->
+	    //<my-component></my-component>
+	//</div>
+	
+	//<script>
+	    //new Vue({
+	        //el: '#app2'
+	    //});
+	//
+	
+	//简化局部注册
+	var vm2 = new Vue({
+    el: '#app2',
+    components: {
+        // 局部注册，my-component2是标签名称
+        'my-component2': {
+            template: '<div>This is the second component!</div>'
+        },
+        // 局部注册，my-component3是标签名称
+        'my-component3': {
+            template: '<div>This is the third component!</div>'
+        }
+    }
+})
+	
+	
+	
+	//父组件和子组件
+	var Child = Vue.extend({
+		template:"<p>this is a child remplate</p>"
+	});
+	
+	var Parent = Vue.extend({
+		template:"<p>this is a parent remplate</p><my-component></my-component>",
+		components:{
+			// 局部注册Child组件，该组件只能在Parent组件内使用
+            'child-component': Child
+		}
+	});
+	
+	//全局注册Parent组件
+	Vue.component("parent-component",Parent);
+	
+	new Vue({
+		el:"#app"
+	});
+	
+	//注意:子组件只能在父组件的template中使用，不可以以子标签的形式在父组件中使用，也不可以在父组件标签外使用子组件
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</script>
+</body>
+</html>

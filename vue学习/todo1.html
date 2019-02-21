@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.css"/>
+	<title>Document</title>
+	<style type="text/css">
+		.complete{
+			text-decoration: line-through;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div class="container" id="app">		
+		<ul id="">
+		  <li v-on:click="toggleComplete(item)"  v-bind:class="{complete:item.completed}" v-for="item in items">
+		    {{ item.message }}
+		  </li>
+		</ul>
+	</div>  
+<script src="vue.js"></script>
+<script>
+	var vm = new Vue({
+		el:"#app",
+		data: {
+		    items: [
+		      {message: 'foo',completed:false },  //true和false使用布尔值，不是字符串
+		      {message: 'Bar',completed:true }
+		    ]
+		},
+		methods:{
+		 	toggleComplete:function(item){
+			 	item.completed = !item.completed;
+			 }
+		}
+	});
+	
+	
+	//	var vm = new Vue({
+//		el:"#app",
+//		data: {
+//			completed:true,   //这样是共用一个completed属性
+//		    items: [
+//		      {message: 'foo'},  //true和false使用布尔值，不是字符串
+//		      {message: 'Bar'}
+//		    ]
+//		},
+//		methods:{
+//		 	toggleComplete:function(item){
+//			 	this.completed = !this.completed;
+//			 }
+//		}
+//	});
+</script>
+</body>
+</html>

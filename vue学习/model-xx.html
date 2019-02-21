@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="vue.js"></script>
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	</head>
+	<body>
+		
+		<div class="container" id="app">		
+			<custom paneltitle="自定义标题一" @parentok="ok"  @parentcancle="cancle">			
+				<ul slot="panel-content" >
+					<li v-for="item in message">{{item}}</li>
+				</ul>
+				
+			</custom>		
+			<custom paneltitle="自定义标题二">
+				
+				<div slot="panel-footer">
+					<button class="btn btn-primary" type="button">前进</button>
+					<button class="btn btn-danger" type="button">返回</button>
+				</div>
+				
+			</custom>	
+		</div>		
+		<script type="text/javascript">			
+			Vue.component("custom",{
+				props:["paneltitle"],
+				template:`
+					<div class="panel panel-default">
+					    <div class="panel-heading">{{paneltitle}}</div>
+					    <div class="panel-body">
+					    	<slot name="panel-content">默认文字</slot>
+					    </div>
+					    <div class="panel-footer">
+					    	
+					    	<slot name="panel-footer">
+					    		<button class="btn btn-primary" type="button" @click="fnok()">确定</button>
+					    		<button class="btn btn-danger" type="button" @click="fncancle()">取消</button>
+					    	</slot>
+					    	
+					    </div>
+					</div>
+				`,
+				methods:{
+					fnok:function(){
+						this.$emit("parentok");
+					},
+					fncancle:function(){
+						this.$emit("parentcancle");
+					}
+				}
+			})
+//			总而言之,调用的是父组件,定义的是子组件
+			new Vue({
+				el:"#app",
+				data:{
+					message:[..."起凡游戏"]
+				},
+				methods:{
+					ok:function(){
+						alert("确定了呀！");
+					},
+					cancle:function(){
+						alert("取消了呀");
+					}
+				}
+			})
+		</script>	
+	</body>
+</html>

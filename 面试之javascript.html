@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>JavaScript</title>
+	</head>
+	<body>
+		
+		一、javascript由三部分组成
+			ECMAscript：核心，javaCcript语言基础
+			DOM：规定了访问HTML的接口
+			BOM：规定了操作浏览器窗口的对象和方法
+			
+		二、基本数据类型  Number String Boolean Null Undefined Symbol，存储在栈内存中
+		
+		三、引用数据类型，即对象 Object Function Array，是保存在堆内存中的对象，栈内存中有它的引用地址
+		
+		四、检测浏览器版本：navigator.userAgent
+			navigator.userAgent.toLowerCase().indexOf('chrome') != -1  //true
+		
+		五、JavaScript中的作用域与变量声明提升
+			js作用域分为全局作用域和函数作用域，没有块级作用域，但是有if()，for()等块语句
+			在块语句内部定义的变量会保留在它们已经存在的作用域内，
+			
+			在JavaScript中，函数声明与变量声明经常被JavaScript引擎隐式地提升到当前作用域的顶部。
+			声明语句中的赋值部分并不会被提升，只有名称被提升
+			
+		六、JavaScript的原型，原型链
+			JavaScript所有对象中都包含了一个__proto__内部属性，这个属性所对应的就是该对象的原型
+			JavaScript函数对象除了包含__proto__内部属性，还拥有prototype属性
+			当函数对象作为构造函数创建实例时，实例的__proto__属性就指向了其构造函数的prototype属性
+			构造函数的prototype属性上挂载了实例对象共用的属性和方法
+			
+			当实例对象调用的属性/方法不存在时，就会通过__proto__内部属性，向其父对象身上进行寻找，直到原型链顶端null，那么就会返回undefined
+			这就是所谓的原型链
+			
+		七、JavaScript如何实现一个类，怎么实例化这个类？
+		
+			<script type="text/javascript">
+				
+				function Person(name,age){
+					this.name = name;
+					this.age = age;
+				}
+				Person.prototype.sayName = function(){
+					console.log(this.name+ '  ' +this.age)
+				}
+				var person = new Person('kate',20);
+				person.sayName();  //kate  20
+				
+				//继承
+				function Children(name,age,job){
+					
+					//属性继承
+					//Person(name,age);  //这里面的this指代的是window
+					Person.call(this,name,age);  //这里面的this指代的是Children的实例
+					//调用Person(this,name,age)就执行了里面的代码，现在改了this指向，那么Children的实例的name值就是参数传进去的值了，搞定
+					this.jpb = job;
+				}
+				
+				//方法继承,这样会导致子类身上添加的方法，父类身上也有，而子类不应该影响父类，使用for in遍历来改写方法的继承
+				//Children.prototype = Person.prototype;
+				
+				extend(Children.prototype,Person.prototype)
+				
+				var children = new Children('xiao',30,'coder');
+				console.log(children.jpb);  //coder
+				children.sayName(); //xiao  30
+				
+				function extend(obj1,obj2){
+					
+					for (var attr in obj2) {
+						obj1[attr] = obj2[attr]
+					}
+					return obj1
+				}
+				
+				
+			</script>
+			
+		八、谈谈this对象的理解
+			this总是指向函数的直接调用者
+			如果有new关键字，那么this指向新创建出来的实例
+			在事件中，this指向这个事件的触发对象
+		
+		九、eval()的功能是将字符串解析成js代码并运行
+		
+		十、什么是 Window 对象? 什么是 Document 对象?
+			Window对象表示当前浏览器的窗口，是Javascript的顶级对象
+			我们创建的所有对象、变量、函数都是Window对象的成员
+			Window 对象的方法和属性是在全局范围内有效的
+			
+			Document 对象是HTML文档的根节点与所有其他节点
+			Document 对象可以使我们通过脚本对HTML页面中的所有元素进行访问
+			Document 对象是Window 对象的一部分，可以通过window.document属性对其进行访问
+			
+		十一、事件捕获、事件冒泡、事件代理/委托
+		
+			事件捕获：事件从最不精确的对象(document 对象)开始触发，然后到最精确的对象触发
+			
+			
+			事件冒泡：事件按照从最特定的事件目标到最不特定的事件目标(document对象)的顺序触发。
+			
+			
+			事件代理/委托：将事件绑定在目标元素的父元素上，利用冒泡机制触发该事件
+				优点：可以减少事件注册，节省大量内存占用
+					   可以将事件应用于动态创建的子元素上
+		
+		十二、分析 ['1', '2', '3'].map(parseInt) 答案是多少？
+		
+			map：这里的map不是“地图”的意思，而是指“映射”。[].map(); 基本用法跟forEach方法类似
+			
+			parseInt作为回调函数要接收三个参数value, index, array,
+			但是对于parseInt本身而言，parseInt(string, radix) 第2个参数 radix 表示进制。省略 radix 或 radix = 0，则数字将以十进制解析
+			这里['1', '2', '3']的index分别是0 1 2
+			所以：parseInt的第二个参数分别是0 1 2
+
+			<script type="text/javascript">
+				
+				parseInt('1', 0);  // 1
+				parseInt('2', 1);  // NaN
+				parseInt('3', 2);  // NaN
+				
+				//所以，parseInt 参数 radix 不合法，导致返回值为 NaN
+				
+				var arr1 = [1,2,3,4]
+				arr1.map(function(value, index, array){
+					console.log(value)
+					console.log(index)
+					console.log(array)
+				})
+			</script>
+			
+		十三、new 操作符具体干了什么？
+			创建实例对象，this变量引用该对象，同时还继承了构造函数的原型
+			属性和方法被加入到this引用的对象中
+			新创建的对象由this所引用，并且最后隐式的返回this
+			
+		十四、javascript关键字
+		
+			for do while 
+			if else
+			function return 
+			switch case default break continue 
+			this
+			instanceof typeof
+			new var
+			throw try catch
+			
+			
+		十五、javascript创建对象的几种方式
+			
+			<script type="text/javascript">
+				
+				//1、对象字面量的方式：
+				var person = {
+					name:'kate',
+					age:20,
+					sayName(){  //简写，省略了function关键字
+						console.log(this.name)
+					}
+				}
+
+				//2、构造函数的方式
+				function Person(name,age){
+					this.name = name;
+					this.age = age;
+				}
+				Person.prototype.sayName = function(){
+					console.log(this.name)
+				}
+				var person = new Person();
+				person.sayName()
+			</script>
+		
+		十六、闭包：函数内嵌套函数，内部函数可以访问外部函数的变量
+			利用闭包特性，可以：
+			将变量保存在内存中，不被垃圾机制回收，因为内部函数还在调用外部变量
+			变量私有化，避免全局污染，因为闭包作用域是私有作用域
+		
+		十七、跨域
+		
+			同源策略：当前域不能请求其他域的数据，除非同源，即域名、协议、端口相同才可以进行请求
+			
+			解决办法：使用JSONP进行请求，即动态创建script标签，利用script标签的src属性请求不受同源策略的约束来跨域请求数据
+			
+			<!--<script type="text/javascript">
+				function handleCallback(response){
+					console.log(response)
+				}
+			</script>
+			
+			<script type="text/javascript">
+				
+				window.onload = function(){
+					
+					var script = document.createElement('script');
+					script.src = 'https://api.douban.com/v2/book/search?q=javascript&count=1&callback=handleCallback'
+					document.body.insertBefore(script,document.body.firstChild)
+				}
+				
+			</script>-->
+			
+		十八、编写一个方法 求一个字符串的字节长度
+			假设：一个英文字符占用一个字节，一个中文字符占用两个字节
+			如果全英文，那么字节长度就是4，就是str.length，现在考虑中文的情况，比英文字节数多1
+			<script type="text/javascript">
+				
+				let str = '你好啊';
+				function getBytes(str){
+					var len = str.length;
+					var bytes = len;
+					for (let i=0;i<len;i++) {
+						if(str.charCodeAt(i)>255){
+							bytes++
+						}
+					}
+					return bytes
+					
+				}
+				console.log(getBytes(str))
+			</script>
+		
+		<hr />
+		
+		<ul>
+			<li>111</li>
+			<li>222</li>
+			<li>333</li>
+		</ul>
+		
+		<script type="text/javascript">
+			
+			//闭包
+			var aLi = document.querySelectorAll('li');
+			for (var i=0;i<aLi.length;i++) {
+				aLi[i].onclick = function(){
+					console.log(i);  //3 3 3
+				}
+			}
+
+			/*for (var i=0;i<aLi.length;i++) {
+				j
+				(function(j){
+					console.log(j);  // 0 1 2
+					aLi[j].onclick = function(){
+						console.log(j); // 0 1 2
+					}
+				})(i)
+
+			}*/
+
+			
+		</script>
+	</body>
+</html>

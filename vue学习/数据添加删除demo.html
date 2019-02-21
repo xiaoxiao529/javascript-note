@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.css"/>
+	<title>Document</title>
+</head>
+
+<body>
+
+	<div class="container">
+		<div id="todo-list-example">
+			<input type="text" placeholder="Add a todo" v-model="newText" class="form-control" @keyup.enter="enterTodo"/>
+			<ul class="list-unstyled">
+				<li 
+					is="todo-component" 
+					v-for="(todo,index) in todos" 
+					:title="todo" 
+					:index = "index"
+					@parent-delete="DeleteHandle(index)"
+				></li>	
+			</ul>
+		</div>
+	</div>
+	
+<script src="vue.js"></script>
+<script>
+
+	Vue.component("todo-component",{  //模板是li  上面直接写<todo-component></todo-component>，在ul里面是通不过的，所以只能是is="todo-component"
+		template:`<li>
+		{{title}}  {{index}}
+		<button @click="Childdelete">X</button>
+		</li> `,
+		props:["title","index"],
+		methods:{
+			Childdelete:function(){
+				this.$emit("parent-delete");  //子组件，需要删除父组件里面的元素  需要触发一个自定义事件来告知父级  this.$emit可以触发自定义事件，告知父级，父级然后触发相应的事件
+											  //事件名称必须为烤串式  event-event
+			}
+		}	
+	})
+	
+	new Vue({
+		el:"#todo-list-example",
+		data:{
+			newText:"",
+			todos: [
+		      'Do the dishes',
+		      'Take out the trash',
+		      'Mow the lawn'
+		    ]
+		},
+		methods:{
+			enterTodo:function(){
+				this.todos.push(this.newText);
+				this.newText = "";
+			},
+			DeleteHandle:function(index){
+				this.todos.splice(index,1);
+				
+			}
+		}
+	});
+	
+</script>
+</body>
+</html>

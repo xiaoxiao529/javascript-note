@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.css"/>
+	<title>vue.js进阶之路由笔记</title>
+	
+</head>
+
+<body>
+	
+	
+	
+	
+
+	<div id="app">
+		
+	</div>
+	
+	<!--4. 使用v-link指令-->
+	<div class="list-group">
+	    <a class="list-group-item" v-link="{ path: '/home'}">Home</a>
+	    <a class="list-group-item" v-link="{ path: '/about'}">About</a>
+	</div>
+	
+	<!--5. 使用<router-view>标签-->
+	<router-view></router-view>
+	<template id="about">
+		<div>
+			<h1>About</h1>
+			<p>This is the tutorial about vue-router.</p>
+		</div>
+	</template>
+<script src="vue.js"></script>
+<script src="//cdn.bootcss.com/vue-router/2.1.1/vue-router.js"></script>
+<script>
+	
+	
+	
+	/*
+
+	
+
+	vue路由
+	
+		前端路由：
+			在web开发中，路由是指根据url分配对应的处理程序
+		
+		vue-router:
+			作用：通过管理url，实现url和组件的对应，并且通过url进行组件之间的切换。
+		
+	使用步骤
+		
+		安装模块
+			npm install vue-router --save
+		引入模块
+			import VueRouter from 'vue-router'
+		作为Vue的插件
+			Vue.use(VueRouter);
+ 		创建路由实例对象
+ 			new VueRouter({
+ 				..配置参数
+ 			})
+ 		注入Vue选项参数
+ 			new Vue({
+ 				router
+ 			})
+ 		告诉路由渲染的位置
+ 		6
+ 			<router-view></router-view>
+ 	
+ 		
+ 		
+ 		
+ 		
+ 		
+ 		
+ 		
+ 		 
+ 		
+ 		
+ 		
+ 		
+ 		
+	 */
+	
+	
+	
+	
+	
+	
+	
+	//1.创建组件
+	var Home = Vue.component("Home",{
+		template:"<div><h1>home</h1><p>{{msg}}</p></div>",
+		data:function() {
+			return {
+				mag:"hello,vue router"
+			}
+		}
+	})
+	
+	var About = Vue.component("About",{
+		template:"#about"
+	});
+	
+//	var vm = new Vue({
+//		el:"#app"
+//	})
+	
+	//2.创建router路由器实例
+	var router = new VueRouter();
+	
+	//3.调用router的map方法映射路由
+	router.map({
+		"/home":{component:Home},
+		"/about":{component:About}
+	});
+	
+	//6.启动路由
+	var App = Vue.extend({});
+	router.start(App,"#app");
+</script>
+</body>
+</html>

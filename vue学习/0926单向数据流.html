@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue组件</title>
+    <link rel="stylesheet" href="《vue.js实战开发系列》20170112课件/index.css">
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.css"/>
+    <script src="./vue.js"></script>
+</head>
+<body>
+	
+	<div id="app" class="container">
+		<h2>父级count</h2>
+		<p>{{count}}</p>
+		<custom-prop :countnum="count" @changecount="counthandle"></custom-prop>
+	</div>
+	
+	<!--<script type="text/javascript">
+		
+		Vue.component("custom-prop",{
+			props:["countnum"],  //父组件传过来的值。 props命名尤其要注意，尽量一个单词搞定，不要什么烤串、驼峰了。
+			template:`
+				<div>
+					<h2>我是自定义的子组件</h2>
+					<p>{{countnum}}</p>
+					<input class="btn" type="button" @click="changeCont" value="点击改变count的值">
+				</div>
+			`,
+			methods:{
+				changeCont:function(){
+					//this.countnum++;  //Avoid mutating a prop directly since the value will be overwritten whenever the parent component re-renders. Instead, use a data or computed property based on the prop's value. Prop being mutated: "countnum" 
+					//子组件不能直接修改父组件传过来的值，如果想修改，使用data或者计算属性代替。
+				}
+			}
+		})
+		
+		var vm = new Vue({
+			el:"#app",
+			data:{
+				count:0
+			}
+		})
+	</script>-->
+	
+	
+	<!--改良之用子组件的data-->
+	<script type="text/javascript">
+		
+		Vue.component("custom-prop",{
+			props:["countnum"],  //父组件传过来的值。 props命名尤其要注意，尽量一个单词搞定，不要什么烤串、驼峰了。
+			data:function(){
+				return {
+					newcountnum:this.countnum  //作为局部这个组件的data的初始值
+				}
+			},
+			template:`
+				<div>
+					<h2>我是自定义的子组件</h2>
+					<p>{{newcountnum}}</p>
+					<input class="btn" type="button" @click="changeCont" value="点击改变count的值">
+				</div>
+			`,
+			methods:{
+				changeCont:function(){
+					this.newcountnum++;
+					this.$emit("changecount");
+				}
+			}
+		})
+		
+		var vm = new Vue({
+			el:"#app",
+			data:{
+				count:0
+			},
+			methods:{
+				counthandle:function(){
+					this.count++;
+				}
+			}
+		})
+	</script>
+	
+</body>
+</html>

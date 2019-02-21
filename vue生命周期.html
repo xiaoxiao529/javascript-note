@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>vue生命周期学习</title>
+  <script src="https://cdn.bootcss.com/vue/2.4.2/vue.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h1>{{message}}</h1>
+    <input type="button" value="点击" @click="change" />
+    <com></com>
+  </div>
+</body>
+<script>
+  var vm = new Vue({
+    el: '#app',
+    //template:'<div>这是在template中的</div>',
+    data: {
+      message: 'Vue的生命周期'
+    },
+    beforeCreate: function() {
+      console.group('------beforeCreate创建前状态------');
+      console.log("%c%s", "color:red" , "el     : " + this.$el); //undefined
+      console.log("%c%s", "color:red","data   : " + this.$data); //undefined 
+      console.log("%c%s", "color:red","message: " + this.message) 
+    },
+    created: function() {
+      console.group('------created创建完毕状态------');
+      console.log("%c%s", "color:red","el     : " + this.$el); //undefined
+      console.log("%c%s", "color:red","data   : " + this.$data); //已被初始化 
+      console.log("%c%s", "color:red","message: " + this.message); //已被初始化
+    },
+    beforeMount: function() {
+      console.group('------beforeMount挂载前状态------');
+      console.log("%c%s", "color:red","el     : " + (this.$el)); //已被初始化
+      console.log(this.$el);
+      console.log("%c%s", "color:red","data   : " + this.$data); //已被初始化  
+      console.log("%c%s", "color:red","message: " + this.message); //已被初始化  
+    },
+    mounted: function() {
+      console.group('------mounted 挂载结束状态------');
+      console.log("%c%s", "color:red","el     : " + this.$el); //已被初始化
+      console.log(this.$el);    
+      console.log("%c%s", "color:red","data   : " + this.$data); //已被初始化
+      console.log("%c%s", "color:red","message: " + this.message); //已被初始化 
+    },
+    beforeUpdate: function () {
+      console.group('beforeUpdate 更新前状态===============》');
+      console.log("%c%s", "color:red","el     : " + this.$el);
+      console.log(this.$el);   
+      console.log("%c%s", "color:red","data   : " + this.$data); 
+      console.log("%c%s", "color:red","message: " + this.message); 
+    },
+    updated: function () {
+      console.group('updated 更新完成状态===============》');
+      console.log("%c%s", "color:red","el     : " + this.$el);
+      console.log(this.$el); 
+      console.log("%c%s", "color:red","data   : " + this.$data); 
+      console.log("%c%s", "color:red","message: " + this.message); 
+    },
+    beforeDestroy: function () {
+      console.group('beforeDestroy 销毁前状态===============》');
+      console.log("%c%s", "color:red","el     : " + this.$el);
+      console.log(this.$el);    
+      console.log("%c%s", "color:red","data   : " + this.$data); 
+      console.log("%c%s", "color:red","message: " + this.message); 
+    },
+    destroyed: function () {
+      console.group('destroyed 销毁完成状态===============》');
+      console.log("%c%s", "color:red","el     : " + this.$el);
+      console.log(this.$el);  
+      console.log("%c%s", "color:red","data   : " + this.$data); 
+      console.log("%c%s", "color:red","message: " + this.message)
+    },
+    methods:{
+    	change(){
+    		this.message = '更改Vue的生命周期'
+    	}
+    },
+    components:{
+    	'com':{
+    		template:'<div>This is component!</div>'
+    	}
+    }
+  })
+</script>
+
+
+		一、beforeCreate和created之间
+			进行事件初始化以及数据的观测，在created阶段，数据已经被绑定到了data属性上
+			当data中的属性值发生改变的时候，视图也会随之变化
+			
+		二、	created和beforeMount之间
+			首先观测是否有el选项，如果有的话就继续向下编译，
+			如果没有el选项，就停止编译，也就意味着停止了生命周期，直到在该vue实例上，调用vm.$mount(el)，这个el就是挂载的DOM节点
+			
+			然后观测vue实例对象中是否有template选项，如果有则将其作为模板编译成render函数（此时模板还未进行渲染）
+			如果没有template选项，则将el的属性值所对应的DOM节点作为模板编译（此时模板还未进行渲染）
+			同时存在，优先渲染template模板
+			
+		三、beforeMount和mounted之间
+			给vue实例对象添加$el成员，并且替换掉挂载的DOM元素
+			
+		四、mounted
+			
+	
+</html>

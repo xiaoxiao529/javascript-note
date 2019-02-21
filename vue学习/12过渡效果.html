@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.css"/>
+	<title>Document</title>
+	<style>
+		.fade-enter-active, .fade-leave-active {
+		  transition: opacity .5s
+		}
+		.fade-enter, .fade-leave-active {
+		  opacity: 0
+		}
+	</style>
+</head>
+
+<body>
+
+	<div id="demo">
+	  <button v-on:click="show = !show">
+	    Toggle
+	  </button>
+	  <transition name="fade">
+	    <p v-if="show">hello</p>
+	  </transition>
+	</div>
+
+<script src="vue.js"></script>
+<script>
+	varvm = new Vue({
+	  el: '#demo',
+	  data: {
+	    show: true
+	  }
+	})
+</script>
+</body>
+</html>

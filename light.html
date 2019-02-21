@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<style>
+			.topBanner { height: 265px; background: #262239; position: relative; overflow: hidden; }
+			.topBanner:before { content: ""; position: absolute; width: 200px; height: 100%; top: 0; left: -250px; overflow: hidden; background: -moz-linear-gradient(left, rgba(255,255,255,0)0, rgba(255,255,255,.2)50%, rgba(255,255,255,0)100%); background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(255,255,255,0)), color-stop(50%, rgba(255,255,255,.2)), color-stop(100%, rgba(255,255,255,0))); background: -webkit-linear-gradient(left, rgba(255,255,255,0)0, rgba(255,255,255,.2)50%, rgba(255,255,255,0)100%); background: -o-linear-gradient(left, rgba(255,255,255,0)0, rgba(255,255,255,.2)50%, rgba(255,255,255,0)100%); -webkit-transform: skewX(-25deg); -moz-transform: skewX(-25deg) }
+			.topBanner:hover:before { left: 150%; transition: left 2s ease 0s; }
+		</style>
+		
+		<div class="topBanner"></div>
+		
+		<script type="text/javascript">
+		    function f1() {
+	            var f1Context = 'f1 context';
+	            function f2() {
+	                var f2Context = 'f2 context';
+	                function f3() {
+	                    var f3Context = 'f3 context';
+	                    console.log(f3Context);
+	                }
+	                f3();
+	                console.log(f2Context);
+	            }
+	            f2();
+	            console.log(f1Context);
+	        }
+	        f1();
+	        
+//	        f3 context
+//	        f2 context
+//	        f1 context
+
+
+	        function foo(i) {
+	            if(i  == 3) {
+	                return;
+	            }
+	            //console.log(i);  //0 1 2
+	            foo(i+1);
+	            console.log(i);  //2 1 0
+	            console.log('hhha')
+	        }
+	        foo(0);
+
+	        
+
+		</script>
+		
+	</body>
+</html>

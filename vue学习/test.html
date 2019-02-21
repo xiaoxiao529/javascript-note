@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.css"/>
+	<title>Document</title>
+	<style type="text/css">
+		.red{
+			color: red;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div id="app">  
+	    <input v-model="num" @keypress.enter="addToList">  
+	    <ul>  
+	        <li v-for="(val,$index) in values">  
+	            {{val.key}}  
+	            <input type="button" value="删除" @click="removeList($index)"/>  
+	        </li>  
+	    </ul>  
+	</div>  
+
+<script src="vue.js"></script>
+<script>
+	new Vue({  
+        el: '#app',  
+        data: {  
+            num: "1",  //初始值
+            values: []  
+        },  
+        methods: {  
+            addToList: function () {  
+                var val = parseInt(this.num.trim());  //注意，因为当上面的num是字符串类型的时候，才能用trim()，如果是数字类型，则用this.num  
+               	//console.log(typeof val); number
+                if (val) {
+                    this.values.push({key: val});  //{key: val}是一个对象
+                }  
+                this.num = String(val + 1);  
+            },  
+            removeList: function (index) {  
+                this.values.splice(index, 1);  
+            }  
+        }  
+    })  
+</script>
+</body>
+</html>

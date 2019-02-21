@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.css"/>
+	<title>Document</title>
+</head>
+
+<body>
+
+	<div id="app">
+		<p><input type="text" v-model="message"></p>
+        <p>
+            <!--click事件直接绑定一个方法-->
+            <button v-on:click="greet">Greet</button>
+        </p>
+        <p>
+            <!--click事件使用内联语句-->
+            <button v-on:click="say('Hi')">Hi</button>
+        </p>
+	</div>
+
+<script src="vue.js"></script>
+
+
+
+<script>
+	var vm = new Vue({
+		el:'#app',
+		data:{
+			message:'hello world'
+		},
+		methods:{
+			greet:function(){
+				console.log(this.message);
+			},
+			say:function(mess){
+				console.log(mess);
+			}
+		}
+	});
+</script>
+</body>
+</html>

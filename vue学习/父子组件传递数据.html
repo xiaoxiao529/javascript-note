@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.css"/>
+	<title>Document</title>
+	<style type="text/css">
+		a:after{
+			content: ;
+		}
+	</style>
+</head>
+
+<body>
+	
+	<div class="container" id="app">
+		<child-template :message="obj"></child-template>
+	</div>
+	
+	<template id="child-template">
+		<div>
+			<ul v-for="list in message">
+				<li>{{list.name}}</li>
+				<li>{{list.age}}</li>
+			</ul>
+		</div>
+	</template>
+	
+<script src="vue.js"></script>
+<script>
+
+
+	var obj = [
+				{"name":"a","age":"1"},
+				{"name":"b","age":"2"},
+				{"name":"c","age":"3"},
+				{"name":"d","age":"4"},
+				{"name":"e","age":"5"}
+			]
+	Vue.component("child-template",{
+		template:"#child-template",
+		props:["message"],
+		data:function(){  //data也可以写在这里面
+			return obj;
+		}
+	});
+	
+	
+	/*	 
+	 new Vue({  //☆这样可以
+		el:"#app",
+		data:{
+			obj:[
+				{"name":"a","age":"1"},
+				{"name":"b","age":"2"},
+				{"name":"c","age":"3"},
+				{"name":"d","age":"4"},
+				{"name":"e","age":"5"},
+			]
+		}
+	});
+	*/
+	
+	new Vue({
+		el:"#app"
+//		data:{  //☆这样也可以，而且不报错了，因为这样返回的是一个对象
+//			obj
+//		}
+	});
+	
+
+</script>
+</body>
+</html>

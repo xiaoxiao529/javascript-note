@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.css"/>
+	<title>Document</title>
+</head>
+
+<body>
+
+	<div class="container" id="app">
+		<form role="form" class="form-horizontal">
+		     <div class="form-group">
+		         <label for="email" class="col-sm-1 control-label">name</label>
+		         <div class="col-sm-11">
+		             <input class="form-control" type="" id="email" v-model="newPerson.name" placeholder="" />
+		          </div>
+		      </div>
+		      <div class="form-group">
+		         <label for="email" class="col-sm-1 control-label">age</label>
+		         <div class="col-sm-11">
+		             <input class="form-control" type="" id="email" v-model="newPerson.age" placeholder="" />
+		          </div>
+		      </div>
+		      <div class="form-group">
+		         <label for="email" class="col-sm-1 control-label">sex</label>
+		         <div class="col-sm-11">
+		             <select name="" id="" class="form-control" v-model="newPerson.sex">
+		             	<option value="male">male</option>
+		             	<option value="female">female</option>
+		             </select>
+		          </div>
+		      </div>
+		      <div class="form-group">
+		      	<button class="btn center-block" v-on:click="addPerson()" type="button">create</button>
+		      </div>
+		</form>
+		
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Age</th>
+					<th>Sex</th>
+					<th>Delete</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="(person,index) in people">
+					<td>{{person.name}}</td>
+					<td>{{person.age}}</td>
+					<td>{{person.sex}}</td>
+					<td><button class="btn" type="button" v-on:click="deletePerson(index)">delete</button></td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+
+
+
+<script src="vue.js"></script>
+
+<script>
+	var vm = new Vue({
+		el:"#app",
+		data:{
+			newPerson:{
+				name:"",
+				age:'',
+				sex:"Male"
+			},
+			people:[
+				{
+					name:"jack",
+					age:30,
+					sex:"male"
+				},
+				{
+					name:"Bill",
+					age:26,
+					sex:"male"
+				},
+				{
+					name:"Tracy",
+					age:22,
+					sex:"female"
+				},
+				{
+					name:"Chris",
+					age:36,
+					sex:"male"
+				}
+			]
+		},
+		methods:{  //在 `methods` 对象中定义方法
+			
+			addPerson:function(){
+				if(this.newPerson.name=="" || this.newPerson.name==null ){
+					return false;
+				}else if(this.newPerson.age=="" || this.newPerson.age==null){
+					return false;
+				}else if(this.newPerson.sex=="" || this.newPerson.sex==null){
+					return false;
+				}
+				this.people.push(this.newPerson);
+				this.newPerson = {  //得重置一下
+					name:"",
+					age:"",
+					sex:"Male"
+				}
+			},
+			
+			deletePerson:function(index){
+				this.people.splice(index,1);							
+			}
+		}
+		
+	});
+</script>
+</body>
+</html>

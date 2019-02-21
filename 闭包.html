@@ -28,21 +28,18 @@
 			aaa();  ///aaa函数执行完毕之后，参数a和变量b不会被垃圾回收机制收回，因为aaa函数内部的bbb函数还在引用a和b
 			
 			
-			//垃圾回收机制
+			//正常的js代码，会有垃圾回收机制
 			function zzz(){
 			    var a=1;
 			}
 			zzz();  //函数执行完之后，变量a就会被释放，节省内存
 			
 			
-			//2、好处
+			//2、好处  闭包中的参数和变量是私有的，不会被垃圾机制回收，会长期驻扎在内存中
 			//★希望一个变量长期驻扎在内存中
 			//★避免全局变量的污染
 			//★私有方法，把方法变为函数的私有方法
-			
-			
-			
-			
+
 			function ccc(){
 				var a = 1;  //a局部变量
 				a++;
@@ -117,8 +114,8 @@
 				
 			})()
 			
-			ggg.a();  //11
-			ggg.b();  //12
+			//ggg.a();  //11
+			//ggg.b();  //12
 			
 			
 			/*------------------------------------------------------------*/
@@ -137,20 +134,23 @@
 			}*/
 			
 			/*方法一、利用闭包改写,使得弹出0、1、2*/
-			/*window.onload = function(){
+			window.onload = function(){
 				var aLi = document.querySelectorAll('li');
 				
 				for (var i=0;i<aLi.length;i++) { 
-					(function(i){  //把循环当中的i(0,1,2)当做一个参数，传进去(永远存在内存当中，想用的时候拿来用)，外部函数执行完毕不会影响内部函数，参数或变量也不会被回收
-						aLi[i].onclick = function(){  //内部函数可以调用外部函数传进来的参数或者变量
-							alert(i);  //0、1、2
+					(function(j){  //把循环当中的i(0,1,2)当做一个参数，传进去(永远存在内存当中，想用的时候拿来用)，外部函数执行完毕不会影响内部函数，参数或变量也不会被回收
+						aLi[j].onclick = function(){  //内部函数可以调用外部函数传进来的参数或者变量
+							alert(j);  //0、1、2
 						}
-					})(i)
+					})(i)  //循环的i作为实参传到闭包当中
 				}
-			}*/
+				console.log('--'+i)  //3
+			}
+			
+
 			
 			/*方法二、利用闭包改写,使得弹出0、1、2*/
-			window.onload = function(){
+			/*window.onload = function(){
 				var aLi = document.querySelectorAll('li');
 				for (var i=0;i<aLi.length;i++) { 
 					
@@ -161,7 +161,7 @@
 					})(i)
 
 				}
-			}
+			}*/
 			
 			
 			/*------------------------------------------------------------*/
@@ -169,7 +169,7 @@
 			
 			//IE下会引发内存泄漏
 			//下面2种做法可以防止内存泄露
-			window.onload = function(){
+			/*window.onload = function(){
 				var oDiv = document.getElementById('div1');
 				oDiv.onclick = function(){
 					alert(oDiv.id);  //这里面引用外部的oDiv
@@ -186,7 +186,7 @@
 					alert(id);  //这里面引用外部的oDiv
 				}
 				oDiv = null;
-			}
+			}*/
 			
 		</script>
 		

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>vue复习</title>
+		<script src="vue.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		
+		
+		<div id="app">
+			<input type="text" v-model="message" />
+			<p v-on:click="clickHandle">{{message}}</p>
+			
+		</div>
+		
+		
+		<script type="text/javascript">
+			
+			
+			/*
+			  
+			1.Vue中的2个核心点
+			响应的数据绑定：当数据发生改变——>自动更新视图 
+			利用object.definedProperty中的setter/getter代理数据，监控对数据的操作
+			
+			
+			2.组合的视图组件
+			ui页面映射为组件树
+			整个大的页面应用，划分为一个个小的组件，可维护、可调试、可重用
+			 
+			 
+			3.虚拟DOM
+			js运行速度很快、然而大量的操作DOM速度就会很慢
+			如果只是改变了一个小的地方，也重新渲染整个DOM节点，那么就会造成速度缓慢以及资源浪费
+			在内存中生成与真实DOM对应的数据结构(利用render函数)，而这个在内存中生成的DOM结构，成为虚拟DOM
+			那么当数据发生变化时，比较虚拟DOM树，以最小的代价改变真实DOM，能够智能地计算出重新渲染整个组件的最小代价并应用到DOM操作上
+			
+			4.MVVM模式——双向数据绑定
+			M：Model 数据模型 js对象
+			V：view 视图模板
+			vm：view-model 视图模型 ，vue提供  绑定、监听
+			
+			5.Vue实例
+			每一个应用都是通过Vue这个构造函数创建根实例启动
+			new Vue({选项对象})
+			创建根实例的时候，需要传入选项对象，对象包括挂载元素、数据、模板、方法等
+			el：挂载元素选择器  String|HtmlElement
+			data：代理数据 Object|Function
+			methods：定义方法 Object
+			注意：每个Vue实例都会代理其data对象里的所有属性，这些被代理的属性是响应的。而新添加的属性不具有响应功能，改变后不会更新视图		
+			Vue实例自身属性和方法：以$开头，如$el、$data...
+			
+			6.map()函数：方法返回一个由原数组中的每个元素调用一个指定方法后的返回值组成的新数组
+			var newArr = oldArr.map(function(item){  item表示原数组中的每一项，会做循环。
+				//do something
+			})
+			
+			
+			7.指令
+			指令的职责是：当表达式的值改变时，相应的将某些行为应用到DOM上
+			在vue中，指令以v-开头
+			
+			v-bind：动态的绑定数据，简写为:
+			举例：动态绑定class v-bind:class
+			语法：
+				:class = "{className:表达式}"  表达式为值true，添加className，为false，则不添加
+				:class = "[className,classname]"
+			
+			
+			
+			
+			v-on：绑定事件监听器，简写为@
+			事件处理器
+			语法：v-on:eventName="eventHandle"
+			写在methods中统一管理
+			
+			事件对象：
+				在事件处理函数中获取
+				内联事件处理函数执行，传入事件对象$event
+			
+			事件修饰符
+			ps.事件处理函数只有纯粹的逻辑判断，不处理DOM事件的细节
+			如：阻止冒泡、取消默认行为、判断按键...需要通过事件修饰符处理
+			语法：v-on:eventName.修饰符="eventHandle"
+			修饰符：
+				.stop、.prevent、.capture、.self .once
+			按键修饰符：
+				.enter .tab .delete .esc .space .up .down .left .right .ctrl .alt .shift .meta .键值
+			
+			
+			事件处理函数中的this指代的是，当前这个根实例vm
+			
+			
+			v-text：更新数据，会覆盖已有结构
+			v-html：可以解析数据中的html结构
+			v-show：根据值的真假，切换元素的display属性
+			条件渲染
+			语法：v-show="表达式"  display:show或者hide
+			
+			
+			
+			
+			v-if：根据值的真假，切换元素的销毁或者重建
+
+			
+			
+			
+			v-else-if：多条件判断，为真假渲染
+			v-else：条件都不符合渲染
+			v-for：基于源数据多次渲染元素或模板块
+			v-model：在表单控件元素上创建双向数据绑定
+			v-pre：跳过元素和子元素的编译过程
+			v-once：只渲染一次，随后数据更新不重新渲染
+			v-cloak：隐藏未编译的{{}}语法，css中设置[v-cloak]{display:none}，也即页面加载未完成时，不会出现{message}这种。
+			
+			8.模板
+			html模板、字符串模板、render函数模板
+			
+			
+			9.todolist案例
+			列表渲染：v-for
+			语法：value,key in items     value,key of items
+			
+			
+			
+			10.计算属性
+			为什么要使用计算属性
+			模板是为了描述视图的结构，模板中放入太多逻辑，导致模板过重且难以维护
+			在计算一个计算属性时，vue.js更新它的依赖列表并缓存结果，只有当其中一个依赖发生了变化，缓存的结果才无效。
+			语法：
+				在选项对象中
+				{
+					...
+					computed:{}
+				}
+			
+			
+			
+			11.组件
+				页面是由一个个组件组成，比如列表、弹框、导航、下拉菜单等。页面只不过是这些组件的容器，组件自由组合形成功能完整的界面，
+				当不需要某个组件、或者想要替换某个组件时，可以随时进行删除和替换，而不影响整个应用的运行。
+				
+				高内聚：组件功能必须是完整的，需要实现哪个功能，那么在对应组件中，所有功能全部实现
+				低耦合：代码独立不会和项目中的其他代码发送冲突
+				
+				vue中组件是一个自定义标签，vue.js编译器为它添加特殊功能，vue也可以扩展原生的html元素，封装可重用的代码
+				
+				组件的基本构成：
+					样式结构
+					行为逻辑
+					数据
+					
+					
+				使用组件之前需要先注册组件
+				注册组件有两种方法：
+					全局注册
+						可以在任何模板中使用，使用之前先注册
+						语法：
+							Vue.component(组件名,选项对象);
+							组件名命名规范：
+								驼峰(camelCase)、烤串(kebab-case)
+							在html中使用组件：无论使用驼峰还是烤串命名组件，使用组件的时候都是烤串形式使用！
+								如果使用烤串命名，则
+								注册：Vue.component("my-component",{})
+								使用：<my-component></my-component>
+								
+								所以，无论注册还是使用，命名格式都使用烤串方式
+						
+						Vue.component("my-component",{
+							template:`html结构`,
+							props:{
+								
+							}
+						})
+						
+					局部注册
+						在组件实例vm中通过选项对象注册，只在所注册的作用域中使用
+						{
+							components:{
+								组件名:选项对象
+							}
+						}
+						
+						var vm = new Vue({
+							el:"#myApp",
+							components:{  
+								"my-component":{  //是一个对象，对象的key值是组件的名字，value值是html结构
+									template:`html结构`
+								}
+							}
+						})
+			
+			 		
+			 		组件间通信
+			 			父组件要给子组件传递数据，子组件需要将它内部发生的事情告知给父组件
+			 			
+			 			父组件——>子组件
+			 			组件实例之间的作用域是独立的，不能在子组件直接用父组件的数据
+			 			但是，可以在组件上使用props自定义属性绑定数据，在组件中需要显示的用props声明自定义属性名
+			 			
+			 			<custom-component CustomProperties="自定义属性"></custom-component>  //props自定义属性使用形式：驼峰烤串均可
+			 			
+			 			Vue.component("",{
+			 				props:["CustomProperties"]  //使用props自定义属性命名的时候使用驼峰形式，使用的时候是驼峰形式，组件注册命名都使用烤串形式
+			 				template:`html结构`
+			 			})
+			 			
+			 			var vm = new Vue({
+			 				el:"#myApp"			 				
+			 			})
+			 			
+			 			子组件——>父组件
+			 			需要用到自定义事件，父组件用v-on:fnName="fnHandle()"(@:fnName="fnHandle()")监听自定义事件，$emit触发父组件所关心的自定义事件。
+			 			
+			 			
+			 			
+			 			记忆点☆☆☆☆☆：
+			 			
+			 				data，如var data={a:1}
+			 				在vue实例化的时候，可以传入data参数，是一个对象{}  【ps.对象必须是纯粹的对象 (含有零个或多个的 key/value 对)】
+			 				每个vue实例vm都会代理其data对象里的所有属性，即vm.a等价于vm.$data.a  【以 _ 或 $ 开头的属性 不会 被 Vue 实例代理】
+			 				而且是相互绑定，修改任何一个值，另一个也会发生对应变化。
+			 				
+			 				注意：如果data是在组件中被定义，那么此时的data必须是一个函数了，而不能是一个对象。
+			 				【当一个组件被定义，data 必须声明为返回一个初始数据对象的函数，因为组件可能被用来创建多个实例。
+			 				如果 data 仍然是一个纯粹的对象，则所有的实例将共享引用同一个数据对象！
+			 				通过提供 data 函数，每次创建一个新实例后，我们能够调用 data 函数，从而返回初始数据的一个全新副本数据对象。】
+			 				
+			 				【每个组件都是相互独立的，如果他们共用一个对象，在更改一个组件数据的时候，会影响其他组件。如果是函数的话，每个组件都有自己独立的数据，相互之间不会影响。】
+			 				
+			 				var data = {a:1};
+			 				
+			 				//直接创建一个实例
+			 				var vm = new Vue({
+			 					data:data
+			 				})
+			 				vm.a //1
+			 				vm.$data === data  //true
+			 				Vue.component("my-component",{
+			 					data:function(){
+			 						return {a:1};
+			 					}
+			 				})
+			 				
+			 				props:可以是数组或者对象，用于接收来自于父组件的数据。
+			 				props 可以是简单的数组，或者使用对象作为替代，对象允许配置高级选项，如类型检测、自定义校验和设置默认值。
+			 					  
+			
+			12、本地存储
+			localStorage
+			
+			13、单向数据流
+			数据从父组件流向(传递)给子组件，只能单向绑定。
+			在子组件内部不应该直接修改父组件传递过来的数据，但是如果想修改怎么办呢，有2种方法。
+			
+				(1)作为data中局部数据的初始值使用(在注册子组件里面，使用data属性)
+				(2)作为子组件中的computed属性
+			 	
+			 		
+			* */
+			
+			var obj = {  //数据，是一个对象
+				message:"hello world!"
+			}
+			
+			//声明式渲染——只需要关心在哪里(where)做什么(what)，而不需要关心怎么实现(how)   初始化根实例，vue自动将数据绑定在DOM模板上。
+			var vm = new Vue({
+				el:"#app",
+				//data:obj   data是一个对象，可以在外面定义对象然后在这里面调用这个对象，也可以直接在这里写一个对象，比如下面的
+				data:{
+					message:"hello world111111!"
+				},
+				methods:{
+					clickHandle:function(){
+						alert(1);
+					}
+				}
+			})
+			
+
+			
+			
+			var arr = [1,2,3,4,5];
+			/*var newArr = arr.map(function(item){
+				return item*2
+			})
+			console.log(newArr);*/
+			
+			var newArr = arr.reduce(function(total,num){
+				return total+num;
+			})
+			console.log(newArr);
+			
+			var str = [{'name':'xiao'},{'age':'20'}];
+			console.log(JSON.stringify(str));
+
+			
+		</script>
+		
+		
+	</body>
+</html>

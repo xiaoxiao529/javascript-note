@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.css"/>
+	<title>Document</title>
+</head>
+
+<body>
+	
+	
+	<div class="container" id="app">
+		<my-component>
+			
+			<div class="dialog-body" slot="body">
+	            <p>你想在对话框中放什么内容都可以！</p>
+	            <p>你可以放一段文字，也可以放一些表单，或者是一些图片。</p>
+	        </div>
+	        
+	        <footer class="dialog-footer" slot="footer">
+	            <button class="btn">关闭</button>
+	        </footer>
+			
+		</my-component>
+	</div>
+	
+	<template id="component1">  <!--slot定义在template里面-->
+		
+		<div>  <!--最少有一个根元素把它们包起来-->
+			<h1>你好，这里是标题</h1>
+			<slot name="body"></slot>
+	        <slot name="footer"></slot>
+		</div>
+		
+	</template>
+	
+<script src="vue.js"></script>
+<script>
+
+	//父子组件之间的访问
+	//父组件访问子组件：使用$children或$refs
+	//子组件访问父组件：使用$parent
+	//子组件访问根组件：使用$root
+
+	Vue.component("my-component",{
+		template:"#component1"
+	});
+	
+	new Vue({
+		el:"#app"
+	});
+	
+	
+</script>
+</body>
+</html>
